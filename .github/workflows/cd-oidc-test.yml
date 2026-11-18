@@ -1,0 +1,21 @@
+name: cd-oidc-repo-star-test
+on:
+  workflow_dispatch: {}
+  push: {}
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  assume:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assume the repo:* role via GitHub OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::399364511058:role/gh-oidc-cd-test
+          aws-region: us-east-1
+          role-session-name: cd-study-repo-star
+      - name: Show who we became (marker CD-STUDY-REPO-STAR)
+        run: |
+          echo "CD-STUDY-REPO-STAR marker"
+          aws sts get-caller-identity
